@@ -59,39 +59,31 @@ router.post('/post', async (req, res) => {
 // Update Post by ID
 router.put('/post/:id', async (req, res) => {
     const { id } = req.params;
-    const post = req.body;
-    post.id = parseInt(id);
+    const { title, description } = req.body;
+  
+    const { success, message, error } = await createOrUpdatePost({
+        postId: id,  // Pass postId (from the URL)
+        title,
+        description,
+    });
 
-    try {
-        const { success } = await createOrUpdatePost(post);
-
-        if (success) {
-            return res.json({ success });
-        }
-
-        return res.status(500).json({ success: false, message: 'Error updating post' });
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ success: false, message: 'Internal server error' });
+    if (success) {
+        return res.json({ success, message });
     }
+  
+    return res.status(500).json({ success: false, message: message || error });
 });
 
 // Delete Post by ID
 router.delete('/post/:id', async (req, res) => {
-    const { id } = req.params;
+    const { id } = req.params;  // Extract the postId from the URL
+    const { success, message } = await deletePostById(id);  // Pass the postId to deletePostById
 
-    try {
-        const { success } = await deletePostById(id);
-
-        if (success) {
-            return res.json({ success });
-        }
-
-        return res.status(500).json({ success: false, message: 'Error deleting post' });
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ success: false, message: 'Internal server error' });
+    if (success) {
+        return res.json({ success });  // Return success if deletion was successful
     }
+
+    return res.status(500).json({ success: false, message: message || 'Error deleting post' });  // Return error message if deletion failed
 });
 
 // Upload Post Image to S3
