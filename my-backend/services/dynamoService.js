@@ -7,37 +7,55 @@ import { v4 as uuidv4 } from 'uuid';
 
 
 const createOrUpdatePost = async (data = {}) => {
-  // Auto-generate postId if not provided
-  const postId = data.postId || uuidv4();  // Use provided postId or generate a new one
-  const { title, description } = data;
+  const { postId, title, description } = data;
 
   // Ensure title and description are provided
   if (!title || !description) {
     throw new Error("Title and Description are required.");
   }
 
-  // The post object will include the auto-generated postId
+  // The post object will include the postId
   const post = {
-    postId,  // Auto-generated postId (or use provided one)
+    postId,  // Use provided postId
     title,   // Title from request body
     description,  // Description from request body
-    createdAt: new Date().toISOString(),  // Timestamp
+    createdAt: new Date().toISOString(),  // Timestamp (for new posts only)
   };
 
   const params = {
-    TableName: PostsTable,  // Your DynamoDB table name
-    Item: post  // The post object to insert into DynamoDB
+    TableName: PostsTable,
+    Item: post,  // The post object to insert into DynamoDB
   };
 
   try {
-    console.log('Attempting to insert post into DynamoDB:', post);  // Log the data being sent to DynamoDB
-    await db.put(params).promise();  // Insert the post into DynamoDB
-    return { success: true, post };  // Return success and the created post
+    const existingPost = await db.get({ TableName: PostsTable, Key: { postId } }).promise();
+    
+    if (existingPost.Item) {
+      // If post exists, update the post
+      const updateParams = {
+        TableName: PostsTable,
+        Key: { postId },
+        UpdateExpression: 'SET title = :title, description = :description',
+        ExpressionAttributeValues: {
+          ':title': title,
+          ':description': description,
+        },
+        ReturnValues: 'UPDATED_NEW',
+      };
+      
+      await db.update(updateParams).promise();
+      return { success: true, message: 'Post updated successfully' };
+    } else {
+      // If post doesn't exist, create a new one
+      await db.put(params).promise();
+      return { success: true, message: 'Post created successfully' };
+    }
   } catch (error) {
-    console.error('Error creating post:', error);  // Log the error
-    return { success: false, error: error.message };  // Return error message
+    console.error('Error creating or updating post:', error);
+    return { success: false, error: error.message };
   }
 };
+
 
 
 // Read All Posts
@@ -72,21 +90,24 @@ const getPostById = async (value, key = 'id') => {
 };
 
 // Delete Post by ID
-const deletePostById = async (value, key = 'id') => {
+const deletePostById = async (value, key = 'postId') => {
   const params = {
     TableName: PostsTable,
     Key: {
-      [key]: parseInt(value)
+      [key]: value,  // The value should be used directly as a string (UUID)
     }
   };
 
   try {
     await db.delete(params).promise();
-    return { success: true };
+    return { success: true };  // Return success if deletion is successful
   } catch (error) {
-    return { success: false };
+    console.error('Error deleting post:', error);  // Log the error for debugging
+    return { success: false, message: error.message };  // Return detailed error message
   }
 };
+
+
 
 // USER operations
 

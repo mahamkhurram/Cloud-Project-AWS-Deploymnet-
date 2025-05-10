@@ -1,6 +1,7 @@
 import express from 'express';
 import { createOrUpdatePost, deletePostById, getPostById, readAllPosts } from '../services/dynamoService.js';
 
+
 const router = express.Router();
 
 // READ ALL Posts
@@ -36,30 +37,35 @@ router.post('/post', async (req, res) => {
 });
 
 // Update Post by ID
+// Update Post by ID
 router.put('/post/:id', async (req, res) => {
-    const post = req.body;
-    const { id } = req.params;
-    post.id = parseInt(id);
+  const { id } = req.params;
+  const { title, description } = req.body;
+  
+  const { success, message, error } = await createOrUpdatePost({
+    postId: id,  // Pass postId (from the URL)
+    title,
+    description,
+  });
 
-    const { success } = await createOrUpdatePost(post);
-
-    if (success) {
-        return res.json({ success });
-    }
-
-    return res.status(500).json({ success: false, message: 'Error updating post' });
+  if (success) {
+    return res.json({ success, message });
+  }
+  
+  return res.status(500).json({ success: false, message: message || error });
 });
 
 // Delete Post by ID
 router.delete('/post/:id', async (req, res) => {
-    const { id } = req.params;
-    const { success } = await deletePostById(id);
+  const { id } = req.params;  // Extract the postId from the URL
+  const { success, message } = await deletePostById(id);  // Pass the postId to deletePostById
 
-    if (success) {
-        return res.json({ success });
-    }
+  if (success) {
+    return res.json({ success });  // Return success if deletion was successful
+  }
 
-    return res.status(500).json({ success: false, message: 'Error deleting post' });
+  return res.status(500).json({ success: false, message: message || 'Error deleting post' });  // Return error message if deletion failed
 });
+
 
 export default router;
