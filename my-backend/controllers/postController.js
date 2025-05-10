@@ -1,3 +1,4 @@
+
 const { dynamoDB, getDBParams } = require('../services/dynamoService');
 
 // Get all posts from DynamoDB
