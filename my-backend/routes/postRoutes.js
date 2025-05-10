@@ -1,65 +1,118 @@
 import express from 'express';
+import multer from 'multer';
 import { createOrUpdatePost, deletePostById, getPostById, readAllPosts } from '../services/dynamoService.js';
+import { uploadFileToS3 } from '../services/s3Service.cjs';
 
 const router = express.Router();
 
+// Setup multer for file uploads
+const storage = multer.memoryStorage(); // Store file in memory
+const upload = multer({ storage: storage });
+
 // READ ALL Posts
 router.get('/posts', async (req, res) => {
-    const { success, data } = await readAllPosts();
+    try {
+        const { success, data } = await readAllPosts();
 
-    if (success) {
-        return res.json({ success, data });
+        if (success) {
+            return res.json({ success, data });
+        }
+        return res.status(500).json({ success: false, message: 'Error fetching posts' });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ success: false, message: 'Internal server error' });
     }
-    return res.status(500).json({ success: false, message: 'Error fetching posts' });
 });
 
 // Get Post by ID
 router.get('/post/:id', async (req, res) => {
     const { id } = req.params;
-    const { success, data } = await getPostById(id);
+    try {
+        const { success, data } = await getPostById(id);
 
-    if (success) {
-        return res.json({ success, data });
+        if (success) {
+            return res.json({ success, data });
+        }
+        return res.status(500).json({ success: false, message: 'Error fetching post' });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ success: false, message: 'Internal server error' });
     }
-    return res.status(500).json({ success: false, message: 'Error fetching post' });
 });
 
 // Create Post
 router.post('/post', async (req, res) => {
-    const { success } = await createOrUpdatePost(req.body);
+    try {
+        const { success } = await createOrUpdatePost(req.body);
 
-    if (success) {
-        return res.json({ success });
+        if (success) {
+            return res.json({ success });
+        }
+
+        return res.status(500).json({ success: false, message: 'Error creating post' });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ success: false, message: 'Internal server error' });
     }
-
-    return res.status(500).json({ success: false, message: 'Error creating post' });
 });
 
 // Update Post by ID
 router.put('/post/:id', async (req, res) => {
-    const post = req.body;
     const { id } = req.params;
+    const post = req.body;
     post.id = parseInt(id);
 
-    const { success } = await createOrUpdatePost(post);
+    try {
+        const { success } = await createOrUpdatePost(post);
 
-    if (success) {
-        return res.json({ success });
+        if (success) {
+            return res.json({ success });
+        }
+
+        return res.status(500).json({ success: false, message: 'Error updating post' });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ success: false, message: 'Internal server error' });
     }
-
-    return res.status(500).json({ success: false, message: 'Error updating post' });
 });
 
 // Delete Post by ID
 router.delete('/post/:id', async (req, res) => {
     const { id } = req.params;
-    const { success } = await deletePostById(id);
 
-    if (success) {
-        return res.json({ success });
+    try {
+        const { success } = await deletePostById(id);
+
+        if (success) {
+            return res.json({ success });
+        }
+
+        return res.status(500).json({ success: false, message: 'Error deleting post' });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+});
+
+// Upload Post Image to S3
+router.post('/post/upload', upload.single('file'), async (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({ message: 'No file uploaded' });
     }
 
-    return res.status(500).json({ success: false, message: 'Error deleting post' });
+    const bucketName = 'privatebucketuser';  // For private uploads, use your bucket name
+    try {
+        const result = await uploadFileToS3(req.file, bucketName);
+
+        if (result.success) {
+            return res.status(200).json({ message: 'File uploaded successfully', data: result.data });
+        } else {
+            return res.status(500).json({ message: 'Error uploading file', error: result.error });
+        }
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Error uploading file', error: error.message });
+    }
 });
 
 export default router;
