@@ -1,0 +1,45 @@
+/* Styles specific to the PostForm component */
+.post-form {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  margin: auto;
+}
+
+.post-form h2 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.post-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 1rem;
+}
+
+.post-form input,
+.post-form textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.post-form button {
+  width: 100%;
+  padding: 10px;
+  background-color: #0078d4;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+}
+
+.post-form button:hover {
+  background-color: #005a8f;
+}

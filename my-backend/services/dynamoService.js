@@ -1,18 +1,72 @@
-const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
-const { DynamoDBDocumentClient } = require('@aws-sdk/lib-dynamodb');
+import { db, Table } from './config/db.config.js';
 
-// Initialize DynamoDB client
-const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
+// Create or Update Post
 
-// Use DynamoDBDocumentClient for easier interaction with DynamoDB
-const dynamoDB = DynamoDBDocumentClient.from(dynamoDBClient);
+const createOrUpdatePost = async (data = {}) => {
+    const params = {
+        TableName: Table,
+        Item: data
+    };
 
-// Helper function to get DynamoDB table parameters
-const getDBParams = (TableName) => ({
-  TableName,
-});
+    try {
+        await db.put(params).promise();
+        return { success: true };
+    } catch (error) {
+        return { success: false, error };
+    }
+};
 
-module.exports = {
-  getDBParams,
-  dynamoDB,
+// Read All Posts
+const readAllPosts = async () => {
+    const params = {
+        TableName: Table
+    };
+
+    try {
+        const { Items = [] } = await db.scan(params).promise();
+        return { success: true, data: Items };
+    } catch (error) {
+        return { success: false, error, data: null };
+    }
+};
+
+// Read Post by ID
+const getPostById = async (value, key = 'id') => {
+    const params = {
+        TableName: Table,
+        Key: {
+            [key]: parseInt(value)
+        }
+    };
+
+    try {
+        const { Item = {} } = await db.get(params).promise();
+        return { success: true, data: Item };
+    } catch (error) {
+        return { success: false, data: null };
+    }
+};
+
+// Delete Post by ID
+const deletePostById = async (value, key = 'id') => {
+    const params = {
+        TableName: Table,
+        Key: {
+            [key]: parseInt(value)
+        }
+    };
+
+    try {
+        await db.delete(params).promise();
+        return { success: true };
+    } catch (error) {
+        return { success: false };
+    }
+};
+
+export {
+    createOrUpdatePost,
+    readAllPosts,
+    getPostById,
+    deletePostById
 };

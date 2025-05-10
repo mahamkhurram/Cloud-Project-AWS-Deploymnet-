@@ -1,15 +1,28 @@
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { getPostById } from '../services/dynamoService.js'; // Replace 'getItem' with the correct export
 
-const register = async (req, res) => {
-  // Handle registration logic (e.g., hashing password, storing in DB)
-};
-
+// Login
 const login = async (req, res) => {
-  const { username, password } = req.body;
-  // Validate user and issue JWT
-  const token = jwt.sign({ username }, process.env.JWT_SECRET, { expiresIn: '1h' });
-  res.json({ token });
+    const { username, password } = req.body;
+    try {
+        // Fetch user from DynamoDB
+        const user = await getItem('Users', { username });
+
+        if (!user) {
+            return res.status(400).json({ message: 'User not found' });
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ message: 'Invalid credentials' });
+        }
+
+        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        res.json({ token });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error' });
+    }
 };
 
-module.exports = { register, login };
+export { login };
