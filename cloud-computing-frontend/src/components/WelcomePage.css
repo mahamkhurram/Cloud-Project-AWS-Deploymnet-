@@ -1,0 +1,89 @@
+/* src/components/WelcomePage.css */
+
+.welcome-container {
+  text-align: center;
+  padding: 50px;
+  background-color: #f4f4f4;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;  /* Full viewport height */
+}
+
+.logo-container {
+  margin-bottom: 20px;
+  animation: moveUpDown 3s ease-in-out infinite;  /* Apply animation to logo */
+}
+
+.home-icon {
+  width: 100px;
+  height: auto;
+}
+
+/* Animation for the logo */
+@keyframes moveUpDown {
+  0% {
+    transform: translateY(0); /* Starting position */
+  }
+  50% {
+    transform: translateY(-20px); /* Move up */
+  }
+  100% {
+    transform: translateY(0); /* Back to original position */
+  }
+}
+
+h1 {
+  font-size: 2.5em;
+  margin: 20px 0;
+}
+
+.links-container {
+  margin-top: 30px;
+}
+
+.link-button {
+  text-decoration: none;
+  padding: 10px 20px;  /* Reduced height of buttons */
+  background-color: #4CAF50;
+  color: white;
+  border-radius: 5px;
+  margin: 0 10px;
+  font-size: 1.2em;
+  transition: background-color 0.3s, transform 0.2s; /* Added smooth transition */
+}
+
+.link-button:hover {
+  background-color: #218838;
+  transform: translateY(-2px); /* Slight lift effect when hovering */
+}
+
+.link-button:active {
+  background-color: #1e7e34;
+}
+
+/* About section */
+.about-section {
+  background-color: #fff;
+  padding: 20px;
+  margin-top: 40px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  width: 100%;
+}
+
+.about-section h2 {
+  font-size: 1.8em;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.about-section p {
+  font-size: 1.1em;
+  color: #555;
+  line-height: 1.6;
+  text-align: justify;
+}
+
