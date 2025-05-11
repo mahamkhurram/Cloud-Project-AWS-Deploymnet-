@@ -1,45 +1,155 @@
-/* src/components/S3Upload.css */
-.upload-container {
-  width: 100%;
-  max-width: 500px;
-  margin: 0 auto;
+/* Creative Container for File Upload */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #343a40;
   padding: 20px;
-  background-color: #fff;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-
-.upload-container h2 {
-  font-size: 1.8em;
-  margin-bottom: 20px;
-}
-
-.upload-container input[type="file"] {
-  padding: 10px;
-  margin: 15px 0;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.upload-container button {
-  padding: 12px 25px;
-  background-color: #4CAF50;
   color: white;
-  border: none;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.home-icon {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+/* Updated Welcome text styling to align it to the right */
+.welcome3-text {
+  font-size: 2em;
+  font-weight: bold;
+  text-align: center;  /* Aligns the text to the right */
+  flex-grow: 1;  
+  margin-right: 0px;   
+  margin-left: 260px;  /* Ensures the text takes up available space */
+}
+
+nav {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 5px;
+}
+
+nav button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  background-color: transparent;
+  color: white;
+
   border-radius: 5px;
   cursor: pointer;
 }
 
-.upload-container button:hover {
-  background-color: #45a049;
+nav button:hover {
+  background-color: #218838;
+}
+.logout-btn {
+  width: 30%; /* Equal width for logout button */
+  background-color: #dc3545;
 }
 
+.logout-btn:hover {
+  background-color: #c82333;
+}
+.upload-container {
+  width: 100%;
+  max-width: 500px;
+  margin-top: 120px;
+ margin-right:auto;
+ margin-left: auto;
+  padding: 30px;
+  background-color: #f5f5f5;  /* Light background for the container */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);  /* Subtle shadow */
+  border-radius: 10px;  /* Rounded corners */
+  text-align: center;
+  border: 1px solid #ddd;  /* Light border for the container */
+}
+
+/* Header Styling */
+.upload-container h2 {
+  font-size: 1.8em;
+  margin-bottom: 20px;
+  color: #333;  /* Dark color for header */
+  font-weight: 600;  /* Bold */
+}
+
+/* Styling for file input */
+.upload-label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #218838;
+  color: white;
+  padding: 12px 25px;
+  font-size: 1.2em;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.upload-label:hover {
+  background-color: #74b18d;
+}
+
+.upload-label span {
+  margin-left: 10px;
+}
+
+/* Styling for upload button */
+.upload-btn {
+  background-color: #007bff;  /* A blue color for the upload button */
+  color: white;
+  padding: 12px 30px;
+  font-size: 1.2em;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 50%;
+  margin: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.upload-btn:hover {
+  background-color: #0056b3;  /* Darker blue on hover */
+}
+
+/* Success message styling */
+
+/* File name display styling */
 .upload-container p {
   font-size: 1em;
-  margin-top: 20px;
-  color: green;
+  margin-top: 10px;
+  color: #333;
+  font-weight: 600;  /* Bold file name */
 }
 
+/* Error message styling */
 .upload-container .error {
-  color: red;
+  font-size: 1em;
+  color: #dc3545;  /* Red for error */
+  margin-top: 10px;
+}
+
+/* File upload custom styling */
+.file-upload-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Styling for the file input */
+.upload-container input[type="file"] {
+  display: none; /* Hide default file input */
+}
+
+/* Add padding and margin for the container */
+.upload-container .upload-btn,
+.upload-container .upload-label {
+  margin-top: 10px;
 }

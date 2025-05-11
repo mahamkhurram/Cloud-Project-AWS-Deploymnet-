@@ -1,6 +1,68 @@
-/* src/components/PostCrud.css */
+/* Header styling */
+/* Header styling */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #343a40;
+  padding: 20px;
+  color: white;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.home-icon {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+/* Updated Welcome text styling to align it to the right */
+.welcome2-text {
+  font-size: 2em;
+  font-weight: bold;
+  text-align: center;  /* Aligns the text to the right */
+  flex-grow: 1;  
+  margin-right: 0px;   
+  margin-left: 200px;  /* Ensures the text takes up available space */
+}
+
+nav {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 5px;
+}
+
+nav button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  background-color: transparent;
+  color: white;
+
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+nav button:hover {
+  background-color: #218838;
+}
+.logout-btn {
+  width: 30%; /* Equal width for logout button */
+  background-color: #dc3545;
+}
+
+.logout-btn:hover {
+  background-color: #c82333;
+}
+
+
+/* Post CRUD Container */
 .post-crud-container {
-  max-width: 800px;
+  margin-top: 20px;
+  max-width: 1000px;
   margin: 50px auto;
   padding: 20px;
   background-color: #fff;
@@ -8,16 +70,10 @@
   border-radius: 10px;
 }
 
-h2 {
-  text-align: center;
-  font-size: 2.5em;
-  margin-bottom: 20px;
-}
-
+/* Table Styling */
 .posts-table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 20px;
 }
 
 .posts-table th, .posts-table td {
@@ -35,32 +91,7 @@ h2 {
   background-color: #f1f1f1;
 }
 
-button {
-  padding: 8px 12px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1em;
-}
-
-.edit-btn {
-  background-color: #ffc107;
-  color: white;
-}
-
-.edit-btn:hover {
-  background-color: #e0a800;
-}
-
-.delete-btn {
-  background-color: #dc3545;
-  color: white;
-}
-
-.delete-btn:hover {
-  background-color: #c82333;
-}
-
+/* Button Styling */
 .create-btn {
   background-color: #28a745;
   color: white;
@@ -68,14 +99,14 @@ button {
   font-size: 1.2em;
   border-radius: 5px;
   cursor: pointer;
+  width: 20%;
+  display: block;
+  margin: 20px auto;  /* Centers the button horizontally */
 }
+
 
 .create-btn:hover {
   background-color: #218838;
-}
-
-.create-btn:active {
-  background-color: #1e7e34;
 }
 
 /* Popup Styling */
@@ -100,6 +131,10 @@ button {
   width: 400px;
   text-align: center;
   animation: popupAnimation 0.3s ease-out;
+}
+
+.popup-content h3 {
+  margin-bottom: 20px;
 }
 
 .popup-content input,
@@ -134,8 +169,41 @@ button {
 .popup-content .close-btn:hover {
   background-color: #c82333;
 }
+/* Edit and Delete Icons */
+.edit-icon, .delete-icon {
+  font-size: 20px;
+  cursor: pointer;
+  margin: 0 10px;
+  transition: color 0.3s ease;
+}
 
-/* Popup Animation */
+/* Edit icon color */
+.edit-icon {
+  color: #ffc107; /* Yellow color */
+}
+
+/* Delete icon color */
+.delete-icon {
+  color: #dc3545; /* Red color */
+}
+
+/* Hover effect */
+.edit-icon:hover {
+  color: #ffb300; /* Slightly darker yellow */
+}
+
+.delete-icon:hover {
+  color: #c82333; /* Slightly darker red */
+}
+
+/* Add a little space between the icons and the text */
+.posts-table td .edit-icon,
+.posts-table td .delete-icon {
+  padding: 5px;
+}
+
+
+/* Popup animation */
 @keyframes popupAnimation {
   from {
     opacity: 0;

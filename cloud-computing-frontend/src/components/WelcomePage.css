@@ -11,12 +11,12 @@
   height: 80vh;  /* Full viewport height */
 }
 
-.logo-container {
+.logo1-container {
   margin-bottom: 20px;
   animation: moveUpDown 3s ease-in-out infinite;  /* Apply animation to logo */
 }
 
-.home-icon {
+.home1-icon {
   width: 100px;
   height: auto;
 }
